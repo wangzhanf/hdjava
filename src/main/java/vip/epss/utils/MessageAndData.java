@@ -8,6 +8,7 @@ import java.util.Map;
  * 消息
  * 状态:
  * 所以创建一个通用的消息封装体
+ * 这是标准数据交换格式的自我实现版本   //新增了一行
  */
 public class MessageAndData {
     private Integer statusCode;//返回状态码,类似于HTTP的4xx表示失败  2xx表示成功
