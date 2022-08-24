@@ -21,11 +21,11 @@ public class LoginInterceptor implements HandlerInterceptor {
             return true;//放行
         }
 
-        HttpSession session = request.getSession();
-        User user = (User)session.getAttribute("USER_SESSION");
-        if(user!=null){
-            return true;//用户已经登录则放行
-        }
+//        HttpSession session = request.getSession();
+//        User user = (User)session.getAttribute("USER_SESSION");
+//        if(user!=null){
+//            return true;//用户已经登录则放行
+//        }
         //如果不放行,则跳转到登录页面
         request.setAttribute("msg","亲,请先登录");
         request.getRequestDispatcher("/user/login").forward(request,response);
