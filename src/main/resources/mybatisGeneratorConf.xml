@@ -1,0 +1,31 @@
+<!DOCTYPE generatorConfiguration PUBLIC
+        "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+    <context id="mysql" targetRuntime="MyBatis3">
+        <commentGenerator>
+            <property name="suppressAllComments" value="true"/>
+        </commentGenerator>
+
+<!--        数据库连接-->
+        <jdbcConnection driverClass="com.mysql.cj.jdbc.Driver"
+                        connectionURL="jdbc:mysql://localhost:3310/hd?serverTimezone=UTC&amp;unicode=true&amp;characterEncoding=UTF-8" userId="root" password="111111" />
+<!--    指定javaBean的生成位置-->
+        <javaModelGenerator targetPackage="vip.epss.domain" targetProject="./src/main/java">
+            <property name="enableSubPackages" value="true"/>
+        </javaModelGenerator>
+<!--        指定mapper的接口文件的位置-->
+        <sqlMapGenerator targetPackage="vip.epss.dao" targetProject="./src/main/java">
+            <property name="enableSubPackages" value="true"/>
+        </sqlMapGenerator>
+
+        <javaClientGenerator type="XMLMAPPER" targetPackage="vip.epss.dao" targetProject="./src/main/java">
+            <property name="enableSubPackages" value="true"/>
+        </javaClientGenerator>
+<!--        指定数据表的生成策略-->
+        <table tableName="depart" domainObjectName="Depart" />
+        <table tableName="employ" domainObjectName="Employ" />
+        
+
+    </context>
+</generatorConfiguration>

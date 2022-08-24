@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       https://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/tx
+       http://www.springframework.org/schema/tx/spring-tx.xsd
+       http://www.springframework.org/schema/aop
+       https://www.springframework.org/schema/aop/spring-aop.xsd">
+<!--        <bean id="newUser" class="vip.epss.domain.User">-->
+<!--            <property name="uid" value="100"></property>-->
+<!--            <property name="username" value="zs"></property>-->
+<!--            <property name="password" value="111"></property>-->
+<!--        </bean>-->
+<!--    <bean id="userService" class="vip.epss.service.impl.UserServiceImpl">-->
+
+<!--    </bean>-->
+    <!--1 开启注解的扫描,使spring能够自动扫描到组件纳入到IOC容器中-->
+    <context:component-scan base-package="vip.epss">
+        <!--        将service和持久层的bean交给spring管理,表现层的bean交给springmvc管理-->
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Service"/>
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Repository"/>
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+    </context:component-scan>
+    <!--    2 使用spring整合mybatis-->
+    <!--    2.0 引入外部的数据连接信息-->
+    <context:property-placeholder location="classpath:db.properties"></context:property-placeholder>
+    <!--    2.1 配置连接池(dbcp,c3p0,durid),通过连接池管理数据库的连接,可以保留mybatis的配置文件,做一些spring配置不太方便的工作-->
+    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+        <property name="driverClass" value="${jdbc.driverClass}"></property>
+        <property name="jdbcUrl"
+                  value="${jdbc.jdbcUrl}"></property>
+        <property name="user" value="${jdbc.user}"></property>
+        <property name="password" value="${jdbc.password}"></property>
+    </bean>
+    <!--    2.2 配置SqlSessionFactory工厂,使用的数据源就应该是 c3p0提供的数据源-->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"></property>
+        <!--        引入独立的mybatis的配置文件,将一些在spring中不易的配置信息放在mybatis中-->
+        <property name="configLocation" value="classpath:mybatis-config.xml"></property>
+
+<!--        配置PageHelper分页插件-->
+        <property name="plugins">
+            <array>
+                <bean class="com.github.pagehelper.PageInterceptor">
+                    <property name="properties">
+                        <!--使用下面的方式配置参数，一行配置一个 -->
+                        <value>
+                            helperDialect=mysql
+                            offsetAsPageNum=true
+                            pageSizeZero=true
+                            reasonable=true
+                        </value>
+                    </property>
+                </bean>
+            </array>
+        </property>
+    </bean>
+    <!--    2.3 配置动态代理指定接口-->
+    <bean id="mapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="vip.epss.dao"></property>
+    </bean>
+    <!--    3 配置spring框架的声明式事务-->
+    <!--    3.1 配置事务管理器-->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"></property>
+    </bean>
+    <!--    3.2 配置事务的增强-->
+    <tx:advice transaction-manager="transactionManager" id="transactionInterceptor">
+        <tx:attributes>
+            <!--            所有的方法都是事务方法-->
+            <tx:method name="*" isolation="DEFAULT"/>
+            <!--            对于查询方法,仅只读-->
+            <tx:method name="select*" read-only="true"/>
+        </tx:attributes>
+    </tx:advice>
+    <!--    3.3 配置AOP,事务如何切入(可以是注解的方式,本案例使用配置文件)-->
+    <aop:config>
+        <!--        表达式的写法:   访问权限[可省略] 返回值类型(*表示所有的返回值) 包.子包.方法(参数)-->
+        <aop:advisor advice-ref="transactionInterceptor"
+                     pointcut="execution(* vip.epss.service.impl.*ServiceImpl.*(..))"/>
+    </aop:config>
+
+<!--    上传文件-->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="defaultEncoding" value="UTF-8"></property>
+        <property name="maxUploadSize" value="10000000"></property>
+    </bean>
+</beans>
