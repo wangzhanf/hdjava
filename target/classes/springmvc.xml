@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       https://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd">
+    <!--    1 组件扫描,因为service层和持久层已经由spring负责管理,所以springmvc仅需要扫描管理Controller即可-->
+    <context:component-scan base-package="vip.epss">
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Service"/>
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Repository"/>
+    </context:component-scan>
+
+    <!--    2 配置视图解析器-->
+    <bean id="internalResourceViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/WEB-INF/pages/"></property>
+        <property name="suffix" value=".jsp"></property>
+    </bean>
+
+    <!--    3 开启springMVC的注解驱动-->
+    <mvc:annotation-driven/>
+
+    <!--    4 配置静态资源过滤-->
+    <!--    <mvc:default-servlet-handler />-->
+
+    <mvc:resources mapping="/css/**" location="/css/"/>
+    <mvc:resources mapping="/js/**" location="/js/"/>
+    <mvc:resources mapping="/images/**" location="/images/"/>
+
+    <!--    5 配置拦截器-->
+    <!--    <mvc:interceptors>-->
+    <!--        &lt;!&ndash;        配置登录拦截器&ndash;&gt;-->
+    <!--        <mvc:interceptor>-->
+    <!--            <mvc:mapping path="/**"/>-->
+    <!--            &lt;!&ndash;            添加排除的选项(静态资源和登录页)&ndash;&gt;-->
+    <!--            <mvc:exclude-mapping path="/user/login"/>-->
+    <!--            <mvc:exclude-mapping path="/css/**"/>-->
+    <!--            <mvc:exclude-mapping path="/js/**"/>-->
+    <!--            <mvc:exclude-mapping path="/images/**"/>-->
+    <!--            <bean class="vip.epss.interceptor.LoginInterceptor"/>-->
+    <!--        </mvc:interceptor>-->
+    <!--    </mvc:interceptors>-->
+
+    <!--    上传文件的组件,目前已经转移到spring中进行管理-->
+    <!--    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">-->
+    <!--        <property name="defaultEncoding" value="utf-8"></property>-->
+    <!--        <property name="maxUploadSize" value="10000000"></property>-->
+    <!--    </bean>-->
+
+    <!--    5 解决$.get从控制器返回的中文乱码问题-->
+    <mvc:annotation-driven>
+        <mvc:message-converters>
+            <bean class="org.springframework.http.converter.StringHttpMessageConverter">
+                <property name="supportedMediaTypes">
+                    <list>
+                        <value>text/plain;charset=UTF-8</value>
+                        <value>text/html;charset=UTF-8;</value>
+                        <value>application/json;charset=UTF-8</value>
+                    </list>
+                </property>
+            </bean>
+        </mvc:message-converters>
+    </mvc:annotation-driven>
+
+    <!--    后端数据校验-->
+    <bean id="validatorFactoryBean" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
+        <property name="providerClass" value="org.hibernate.validator.HibernateValidator"/>
+    </bean>
+    <!--    数据类型转换-->
+    <!-- 引入spring框架的类型转换工厂 -->
+    <bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
+        <!-- 注入 -->
+        <property name="converters">
+            <!-- 注册自己定义的字符串转日期类型的转换器 -->
+            <bean class="vip.epss.utils.StringToDateConvert"></bean>
+        </property>
+    </bean>
+    <!--    开启注解支持,使自定义的转换器生效-->
+    <mvc:annotation-driven conversion-service="conversionService"/>
+
+
+</beans>

@@ -1,9 +1,10 @@
 package vip.epss.domain;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-public class Project {
+public class Project implements Serializable {
     private Integer pid;
 
     private String pname;
@@ -35,5 +36,30 @@ public class Project {
 
     public void setPuptime(Date puptime) {
         this.puptime = puptime;
+    }
+
+    public Project(String pname) {
+        this.pname = pname;
+    }
+
+    public Project() {
+    }
+
+    public List<Employee> getEmployees() {
+        return employees;
+    }
+
+    public void setEmployees(List<Employee> employees) {
+        this.employees = employees;
+    }
+
+    @Override
+    public String toString() {
+        return "Project{" +
+                "pid=" + pid +
+                ", pname='" + pname + '\'' +
+                ", puptime=" + puptime +
+                ", employees=" + employees +
+                '}';
     }
 }

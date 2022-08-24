@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <settings>
+<!--        配置驼峰映射-->
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+    </settings>
+<!--   配置别名映射-->
+    <typeAliases>
+<!--        默认情况下别名是类名的小写开头-->
+        <package name="vip.epss.domain"/>
+<!--        <typeAlias type="vip.epss.domain.User" alias="User"></typeAlias>-->
+    </typeAliases>
+</configuration>

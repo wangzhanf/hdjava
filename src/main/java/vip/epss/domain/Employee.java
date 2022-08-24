@@ -1,9 +1,10 @@
 package vip.epss.domain;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-public class Employee {
+public class Employee implements Serializable {
     private Integer eid;
 
     private String ename;
@@ -11,6 +12,27 @@ public class Employee {
     private String epass;
 
     private Integer edid;
+
+    public Employee(String ename, String epass) {
+        this.ename = ename;
+        this.epass = epass;
+    }
+
+    @Override
+    public String toString() {
+        return "Employee{" +
+                "eid=" + eid +
+                ", ename='" + ename + '\'' +
+                ", epass='" + epass + '\'' +
+                ", edid=" + edid +
+                ", euptime=" + euptime +
+                ", info=" + info +
+                ", projects=" + projects +
+                '}';
+    }
+
+    public Employee() {
+    }
 
     public Info getInfo() {
         return info;

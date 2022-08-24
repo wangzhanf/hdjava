@@ -1,8 +1,9 @@
 package vip.epss.domain;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Info {
+public class Info implements Serializable {
     private Integer iid;
 
     private String iphone;
@@ -41,5 +42,23 @@ public class Info {
 
     public void setIuptime(Date iuptime) {
         this.iuptime = iuptime;
+    }
+
+    public Info(String iphone, Integer ieid) {
+        this.iphone = iphone;
+        this.ieid = ieid;
+    }
+
+    public Info() {
+    }
+
+    @Override
+    public String toString() {
+        return "Info{" +
+                "iid=" + iid +
+                ", iphone='" + iphone + '\'' +
+                ", ieid=" + ieid +
+                ", iuptime=" + iuptime +
+                '}';
     }
 }
