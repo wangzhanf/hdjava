@@ -148,7 +148,7 @@
       <!--            scope依赖形式-->
       <!--                compile  编译和发布时都会将该包放在构建路径中  mybatis-->
       <!--                test 测试时能够使用,不会发布   junit-->
-      <!--                provider 不会发布      servlet-->
+      <!--                provided 不会发布      servlet-->
       <scope>compile</scope>
     </dependency>
     <!--        servlet和jsp依赖,EL表达式-->
