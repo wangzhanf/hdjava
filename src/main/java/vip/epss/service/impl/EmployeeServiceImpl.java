@@ -1,6 +1,7 @@
 package vip.epss.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import vip.epss.dao.EmployeeMapper;
 import vip.epss.domain.Employee;
 import vip.epss.domain.EmployeeExample;
@@ -8,6 +9,8 @@ import vip.epss.service.EmployeeService;
 
 import java.util.List;
 
+//此处需要添加注解使IOC容器能够将该类的实例对象作为组件扫描到容器中
+@Service(value = "employeeService")
 public class EmployeeServiceImpl implements EmployeeService {
 
     @Autowired
