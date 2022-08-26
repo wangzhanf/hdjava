@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee</title>
+    <link rel="stylesheet" href="css/bootstrap.css" />
+</head>
+<body>
+<!--
+单页应用， 所有功能集成在当前页面
+一般对数据的操作就是  增，删，改，查
+1   打开该页时自动访问后端controller得到列表数据【查】
+2   点击具体按钮时访问后端controller 执行操作【增，删，改】
+3   利用DOM（不刷新页面修改页面局部内容）
+4   利用异步网络请求ajax（不刷新页面在浏览器后台发送HTTP请求）
+-->
+<h4>Employee</h4>
+
+<form action="employee/login">
+    <div class="form-group">
+        <label for="ename">Ename:</label>
+        <input type="text" class="form-control" placeholder="Enter ename" name="ename" id="ename">
+    </div>
+    <div class="form-group">
+        <label for="epass">Password:</label>
+        <input type="password" class="form-control" placeholder="Enter password" name="epass" id="epass">
+    </div>
+    <div class="form-group form-check">
+        <label class="form-check-label">
+            <input class="form-check-input" type="checkbox"> Remember me
+        </label>
+    </div>
+    <button type="submit" class="btn btn-primary">登录</button>
+</form>
+
+<table class="table table-primary table-hover table-striped">
+    <thead>
+    <tr>
+        <th>全选</th>
+        <th>eid</th>
+        <th>ename</th>
+        <th>epass</th>
+        <th>edid</th>
+        <th></th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody  id="display">
+    </tbody>
+</table>
+
+
+
+
+
+<script src="js/jquery-3.3.1.js"></script>
+<script src="js/bootstrap.js"></script>
+
+<script>
+    //页面加载时
+    $(document).ready(function () {
+        //1 访问所有员工数据
+        $.ajax({
+            url:"employee/list",
+            dataType:"json",
+            success:function(ret){
+                console.log(ret);
+                //将数据渲染到页面中
+                // $("#dis").text(ret.dataZone.emplist[0].ename);
+                $("#display").empty();//先清空原始内容
+                let emps = ret.dataZone.emplist;
+                //开始循环遍历
+                $.each(emps,function(index,item){
+                    //遍历一次创建一个行
+                    var eTr = $("<tr></tr>");
+                    //依次构建单元格td
+                    var checkBoxTd = $('<td><input type="checkbox" name="empids" /></td>');
+                    var eidTd = $('<td></td>').text(item.eid);
+                    var enameTd = $('<td></td>').text(item.ename);
+                    var epassTd = $('<td></td>').text(item.epass);
+                    var edidTd = $('<td></td>').text(item.edid);
+                    var updateTd = $('<td></td>').html('<button class="btn btn-info">修改</button>');
+                    var deleteTd = $('<td></td>').html('<a class="btn btn-danger" href="employee/delete?eid='+item.eid+'">删除</a>');
+                    //每次循环将创建的td追加到tr中
+                    eTr.append(checkBoxTd).append(eidTd).append(enameTd).append(epassTd).append(edidTd).append(updateTd).append(deleteTd);
+                    //每次循环将创建的tr追加到tbody中
+                    $("#display").append(eTr); // 每次修改前端页面都需要重启服务器太浪费时间， 可以考虑热部署
+                });
+
+
+            },
+            error:function (eno) {
+                console.log(eno);
+            }
+        });
+    });
+</script>
+
+
+</body>
+</html>
