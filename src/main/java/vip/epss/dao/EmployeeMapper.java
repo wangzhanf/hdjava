@@ -31,4 +31,6 @@ public interface EmployeeMapper {
 /***************************新增加的接口用于封装持有对象******************************************************/
 
     Employee selectByPrimaryKeyWithObject(Integer eid);
+
+    List<Employee> selectByPid(Integer pid);
 }

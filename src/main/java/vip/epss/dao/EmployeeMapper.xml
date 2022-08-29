@@ -213,9 +213,11 @@
 <!--  id对方法名，parameterType对应接口中方法的参数类型，resultXXXX对应接口中方法的返回值-->
   <select id="selectByPrimaryKeyWithObject" parameterType="java.lang.Integer" resultMap="BaseResultMapWithObject">
     select
-        e.eid as eid,e.ename as ename,e.epass as epass,e.euptime as euptime,i.iid as iid,i.iphone as iphone
+        e.eid as eid,e.ename as ename,e.epass as epass,e.euptime as euptime,i.iid as iid,i.iphone as iphone,p.pid as pid, p.pname as pname
     from employee as e
         left join info as i on e.eid=i.ieid
+        left join matchep as m on e.eid = m.meid
+        left join project as p on m.mpid = p.pid
     where eid = #{eid,jdbcType=INTEGER}
   </select>
 <!--  id节点代表主键字段，普通字段用result，property指java类中属性名，jdbcType指数据库中字段类型，column指ResultSet中的字段名-->
@@ -230,7 +232,19 @@
         <id column="iid" property="iid" jdbcType="INTEGER" />
         <result column="iphone" property="iphone" jdbcType="VARCHAR" />
     </association>
-<!--    封装1对多 中的持有的对象集合  ，  使用 collection节点封装, 类型说的是集合封装的具体数据的类型,select指子查询,column就是子查询的传入参数-->
-<!--    <collection property="projects" ofType="vip.epss.domain.Project" select="vip.epss.dao.ProjectMapper.selectByPrimaryKey" column="pid"></collection>-->
+<!--    封装1对多 中的持有的对象集合  ，  使用 collection节点封装, 类型说的是集合封装的具体数据的类型,为了方便说明，切换为两个列子演示1对多的封装，-->
+    <collection property="projects" ofType="vip.epss.domain.Project">
+        <id column="pid" jdbcType="INTEGER" property="pid" />
+        <result column="pname" jdbcType="VARCHAR" property="pname" />
+    </collection>
   </resultMap>
+
+<!--通过子查询方式实现1对多的映射， 请查看Project相关文件-->
+  <select id="selectByPid" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+        e.*
+    from employee as e
+        left join matchep as m on e.eid = m.meid
+    where m.mpid = #{pid,jdbcType=INTEGER}
+  </select>
 </mapper>

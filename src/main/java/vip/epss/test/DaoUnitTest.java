@@ -11,6 +11,7 @@ import vip.epss.dao.EmployeeMapper;
 import vip.epss.dao.InfoMapper;
 import vip.epss.dao.ProjectMapper;
 import vip.epss.domain.Employee;
+import vip.epss.domain.Project;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -66,8 +67,14 @@ public class DaoUnitTest {
 
 //    测试持有1对1 对象的自动封装
     @Test
-    public void testSelectByPrimaryKeyWithObject(){
+    public void testEmployeeSelectByPrimaryKeyWithObject(){
         Employee employee = employeeMapper.selectByPrimaryKeyWithObject(1);
         System.out.println(employee);
+    }
+
+    @Test
+    public void testProjectSelectByPrimaryKeyWithObject(){
+        Project project = projectMapper.selectByPrimaryKeyWithObject(2);
+        System.out.println(project);
     }
 }

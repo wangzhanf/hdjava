@@ -27,4 +27,8 @@ public interface ProjectMapper {
     int updateByPrimaryKeySelective(Project record);
 
     int updateByPrimaryKey(Project record);
+
+    /***************************新增加的接口用于封装持有对象******************************************************/
+    Project selectByPrimaryKeyWithObject(Integer pid);
+
 }
