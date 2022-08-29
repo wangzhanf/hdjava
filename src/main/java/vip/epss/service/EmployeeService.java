@@ -1,6 +1,7 @@
 package vip.epss.service;
 
 import vip.epss.domain.Employee;
+import vip.epss.domain.EmployeeExample;
 
 import java.util.List;
 
@@ -17,5 +18,7 @@ public interface EmployeeService {
     public List<Employee> selectAll();
     //删除一个员工数据
     public Integer deleteOne(Integer eid);
+    //批量删除
+    int deleteByExample(EmployeeExample example);
 
 }

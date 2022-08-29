@@ -63,4 +63,11 @@ public class DaoUnitTest {
         List<Employee> employees = employeeMapper.selectByExample(null);
         System.out.println(employees);
     }
+
+//    测试持有1对1 对象的自动封装
+    @Test
+    public void testSelectByPrimaryKeyWithObject(){
+        Employee employee = employeeMapper.selectByPrimaryKeyWithObject(1);
+        System.out.println(employee);
+    }
 }

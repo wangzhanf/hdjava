@@ -1,31 +1,36 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>首页</title>
-    <link rel="stylesheet" href="css/bootstrap.css" />
+    <link href="css/bootstrap.css" rel="stylesheet"/>
 </head>
 <body>
-<h4>登录界面</h4>
-
-<form action="employee/login">
-    <div class="form-group">
-        <label for="ename">Ename:</label>
-        <input type="text" class="form-control" placeholder="Enter ename" name="ename" id="ename">
-    </div>
-    <div class="form-group">
-        <label for="epass">Password:</label>
-        <input type="password" class="form-control" placeholder="Enter password" name="epass" id="epass">
-    </div>
-    <div class="form-group form-check">
-        <label class="form-check-label">
-            <input class="form-check-input" type="checkbox"> Remember me
-        </label>
-    </div>
-    <button type="submit" class="btn btn-primary">登录</button>
-</form>
 
 
+<header class="container-fluid bg-primary text-white">
+    <h2 class="offset-4 mt-3 mb-3 p-2">后台管理系统</h2>
+</header>
+
+<div class="container">
+    <h3>登录界面</h3>
+    <form action="employee/login">
+        <div class="form-group">
+            <label for="ename">Ename:</label>
+            <input class="form-control" id="ename" name="ename" placeholder="Enter ename" type="text">
+        </div>
+        <div class="form-group">
+            <label for="epass">Epass:</label>
+            <input class="form-control" id="epass" name="epass" placeholder="Enter password" type="password">
+        </div>
+        <div class="form-group form-check">
+            <label class="form-check-label">
+                <input class="form-check-input" type="checkbox"> Remember me
+            </label>
+        </div>
+        <button class="btn btn-primary" type="submit">登录</button>
+    </form>
+</div>
 
 
 <script src="js/jquery-3.3.1.js"></script>

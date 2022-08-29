@@ -27,4 +27,8 @@ public interface EmployeeMapper {
     int updateByPrimaryKeySelective(Employee record);
 
     int updateByPrimaryKey(Employee record);
+
+/***************************新增加的接口用于封装持有对象******************************************************/
+
+    Employee selectByPrimaryKeyWithObject(Integer eid);
 }

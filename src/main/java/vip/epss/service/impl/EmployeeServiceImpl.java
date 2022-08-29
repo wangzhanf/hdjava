@@ -75,4 +75,9 @@ public class EmployeeServiceImpl implements EmployeeService {
         int i = employeeMapper.deleteByPrimaryKey(eid);
         return i;
     }
+
+    @Override
+    public int deleteByExample(EmployeeExample example) {
+        return employeeMapper.deleteByExample(example);
+    }
 }

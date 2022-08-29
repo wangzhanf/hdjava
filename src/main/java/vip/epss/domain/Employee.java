@@ -1,6 +1,7 @@
 package vip.epss.domain;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -56,7 +57,7 @@ public class Employee implements Serializable {
     private Info info;
 
     //多对多 的  持有对象的表现方式
-    private List<Project> projects;
+    private List<Project> projects = new ArrayList<>();
 
     public Integer getEid() {
         return eid;
