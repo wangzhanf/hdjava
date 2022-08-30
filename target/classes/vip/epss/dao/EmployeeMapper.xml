@@ -232,14 +232,14 @@
         <id column="iid" property="iid" jdbcType="INTEGER" />
         <result column="iphone" property="iphone" jdbcType="VARCHAR" />
     </association>
-<!--    封装1对多 中的持有的对象集合  ，  使用 collection节点封装, 类型说的是集合封装的具体数据的类型,select指子查询,column就是子查询的传入参数，为了方便说明，切换为两个列子演示1对多的封装，-->
+<!--    封装1对多 中的持有的对象集合  ，  使用 collection节点封装, 类型说的是集合封装的具体数据的类型,为了方便说明，切换为两个列子演示1对多的封装，-->
     <collection property="projects" ofType="vip.epss.domain.Project">
         <id column="pid" jdbcType="INTEGER" property="pid" />
         <result column="pname" jdbcType="VARCHAR" property="pname" />
     </collection>
   </resultMap>
 
-
+<!--通过子查询方式实现1对多的映射， 请查看Project相关文件-->
   <select id="selectByPid" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select
         e.*

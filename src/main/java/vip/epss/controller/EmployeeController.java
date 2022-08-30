@@ -66,6 +66,20 @@ public class EmployeeController {
         return MessageAndData.success().add("pageInfo",pageInfo);
     }
 
+    /**
+     * 新增一条员工记录
+     * */
+    @ResponseBody
+    @RequestMapping(value = "/opt",method = RequestMethod.POST)
+    public MessageAndData optAdd(Employee employee){
+        boolean b = employeeService.regNewEmployee(employee);
+        if(b){
+            return MessageAndData.success();
+        }else{
+            return MessageAndData.error();
+        }
+    }
+
     @RequestMapping("/delete")
     @ResponseBody           //返回给客户端的是json数据
     public MessageAndData delete(@RequestParam Integer eid){

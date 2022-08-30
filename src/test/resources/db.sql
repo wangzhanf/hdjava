@@ -108,3 +108,75 @@ insert into matchep (meid, mpid) values (1,2),
                                         (5,2),
                                         (5,3)
                                         ;
+
+
+
+
+
+insert into employee (ename, epass) values ('lixiaosi','1234');
+
+select * from employee;
+
+
+# 需要查询eid为1的员工的基本信息+手机号码【info表】+参与的项目【project   +   matchep】
+# select * from employee,info,project,matchep;        # 笛卡尔乘积
+
+# 查询语句的结果会被封装在ResultSet  ，   ORM等框架【MyBatis】封装是自动识别按照ResultSet中的字段进行封装，
+# 建议设计数据库的时候字段名称尽量不同，防止出现歧义，    SQL执行时通过别名方式避免歧义问题
+
+
+# 推进过程1
+select
+    e.eid as eid,e.ename as ename,e.epass as epass,e.euptime as euptime,i.iid as iid,i.iphone as iphone
+from employee as e
+         left join info as i on e.eid=i.ieid
+where e.eid = 1;
+
+# 推进过程2,本例中使用此过程的衍生模式
+select
+    e.eid as eid,e.ename as ename,e.epass as epass,e.euptime as euptime,i.iid as iid,i.iphone as iphone,m.mpid as mpid
+from employee as e
+         left join info as i on e.eid=i.ieid
+         left join matchep as m on e.eid = m.meid
+where e.eid = 1;
+
+select * from project where pid in (
+    select
+        m.mpid as mpid
+    from employee as e
+             left join info as i on e.eid=i.ieid
+             left join matchep as m on e.eid = m.meid
+    where e.eid = 1
+
+);
+
+
+
+
+# SQL中的完整结果
+select
+    e.eid as eid,e.ename as ename,e.epass as epass,e.euptime as euptime,i.iid as iid,i.iphone as iphone,p.pid as pid, p.pname as pname
+from employee as e
+         left join info as i on e.eid=i.ieid
+         left join matchep as m on e.eid = m.meid
+         left join project as p on m.mpid = p.pid
+where e.eid = 1;
+
+
+
+
+
+select
+    p.pid as pid, p.pname as pname ,p.puptime as puptime , e.eid as eid , e.ename as ename
+from project as p
+         left join matchep as m on p.pid = m.mpid
+         left join employee as e on m.meid = e.eid
+where p.pid = 2;
+
+
+
+select
+    p.pid as pid, p.pname as pname ,p.puptime as puptime ,mpid as mpid, m.meid as meid
+from project as p
+         left join matchep as m on p.pid = m.mpid
+where p.pid = 2;

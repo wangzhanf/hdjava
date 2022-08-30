@@ -1,181 +1,201 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="vip.epss.dao.ProjectMapper">
-  <resultMap id="BaseResultMap" type="vip.epss.domain.Project">
-    <id column="pid" jdbcType="INTEGER" property="pid" />
-    <result column="pname" jdbcType="VARCHAR" property="pname" />
-    <result column="puptime" jdbcType="TIMESTAMP" property="puptime" />
-  </resultMap>
-  <sql id="Example_Where_Clause">
-    <where>
-      <foreach collection="oredCriteria" item="criteria" separator="or">
-        <if test="criteria.valid">
-          <trim prefix="(" prefixOverrides="and" suffix=")">
-            <foreach collection="criteria.criteria" item="criterion">
-              <choose>
-                <when test="criterion.noValue">
-                  and ${criterion.condition}
-                </when>
-                <when test="criterion.singleValue">
-                  and ${criterion.condition} #{criterion.value}
-                </when>
-                <when test="criterion.betweenValue">
-                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
-                </when>
-                <when test="criterion.listValue">
-                  and ${criterion.condition}
-                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
-                    #{listItem}
-                  </foreach>
-                </when>
-              </choose>
+    <resultMap id="BaseResultMap" type="vip.epss.domain.Project">
+        <id column="pid" jdbcType="INTEGER" property="pid"/>
+        <result column="pname" jdbcType="VARCHAR" property="pname"/>
+        <result column="puptime" jdbcType="TIMESTAMP" property="puptime"/>
+    </resultMap>
+    <sql id="Example_Where_Clause">
+        <where>
+            <foreach collection="oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" prefixOverrides="and" suffix=")">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach close=")" collection="criterion.value" item="listItem" open="("
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
             </foreach>
-          </trim>
-        </if>
-      </foreach>
-    </where>
-  </sql>
-  <sql id="Update_By_Example_Where_Clause">
-    <where>
-      <foreach collection="example.oredCriteria" item="criteria" separator="or">
-        <if test="criteria.valid">
-          <trim prefix="(" prefixOverrides="and" suffix=")">
-            <foreach collection="criteria.criteria" item="criterion">
-              <choose>
-                <when test="criterion.noValue">
-                  and ${criterion.condition}
-                </when>
-                <when test="criterion.singleValue">
-                  and ${criterion.condition} #{criterion.value}
-                </when>
-                <when test="criterion.betweenValue">
-                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
-                </when>
-                <when test="criterion.listValue">
-                  and ${criterion.condition}
-                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
-                    #{listItem}
-                  </foreach>
-                </when>
-              </choose>
+        </where>
+    </sql>
+    <sql id="Update_By_Example_Where_Clause">
+        <where>
+            <foreach collection="example.oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" prefixOverrides="and" suffix=")">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach close=")" collection="criterion.value" item="listItem" open="("
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
             </foreach>
-          </trim>
+        </where>
+    </sql>
+    <sql id="Base_Column_List">
+        pid
+        , pname, puptime
+    </sql>
+    <select id="selectByExample" parameterType="vip.epss.domain.ProjectExample" resultMap="BaseResultMap">
+        select
+        <if test="distinct">
+            distinct
         </if>
-      </foreach>
-    </where>
-  </sql>
-  <sql id="Base_Column_List">
-    pid, pname, puptime
-  </sql>
-  <select id="selectByExample" parameterType="vip.epss.domain.ProjectExample" resultMap="BaseResultMap">
-    select
-    <if test="distinct">
-      distinct
-    </if>
-    <include refid="Base_Column_List" />
-    from project
-    <if test="_parameter != null">
-      <include refid="Example_Where_Clause" />
-    </if>
-    <if test="orderByClause != null">
-      order by ${orderByClause}
-    </if>
-  </select>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from project
-    where pid = #{pid,jdbcType=INTEGER}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from project
-    where pid = #{pid,jdbcType=INTEGER}
-  </delete>
-  <delete id="deleteByExample" parameterType="vip.epss.domain.ProjectExample">
-    delete from project
-    <if test="_parameter != null">
-      <include refid="Example_Where_Clause" />
-    </if>
-  </delete>
-  <insert id="insert" parameterType="vip.epss.domain.Project">
-    insert into project (pid, pname, puptime
-      )
-    values (#{pid,jdbcType=INTEGER}, #{pname,jdbcType=VARCHAR}, #{puptime,jdbcType=TIMESTAMP}
-      )
-  </insert>
-  <insert id="insertSelective" parameterType="vip.epss.domain.Project">
-    insert into project
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="pid != null">
-        pid,
-      </if>
-      <if test="pname != null">
-        pname,
-      </if>
-      <if test="puptime != null">
-        puptime,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="pid != null">
-        #{pid,jdbcType=INTEGER},
-      </if>
-      <if test="pname != null">
-        #{pname,jdbcType=VARCHAR},
-      </if>
-      <if test="puptime != null">
-        #{puptime,jdbcType=TIMESTAMP},
-      </if>
-    </trim>
-  </insert>
-  <select id="countByExample" parameterType="vip.epss.domain.ProjectExample" resultType="java.lang.Long">
-    select count(*) from project
-    <if test="_parameter != null">
-      <include refid="Example_Where_Clause" />
-    </if>
-  </select>
-  <update id="updateByExampleSelective" parameterType="map">
-    update project
-    <set>
-      <if test="record.pid != null">
-        pid = #{record.pid,jdbcType=INTEGER},
-      </if>
-      <if test="record.pname != null">
+        <include refid="Base_Column_List"/>
+        from project
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+        <if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
+    </select>
+    <!--  此处注意，其实mybatis中sql片段传入的参数是整数时变量名叫什么都无所谓的-->
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from project
+        where pid = #{pid,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete
+        from project
+        where pid = #{pid,jdbcType=INTEGER}
+    </delete>
+    <delete id="deleteByExample" parameterType="vip.epss.domain.ProjectExample">
+        delete from project
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </delete>
+    <insert id="insert" parameterType="vip.epss.domain.Project">
+        insert into project (pid, pname, puptime)
+        values (#{pid,jdbcType=INTEGER}, #{pname,jdbcType=VARCHAR}, #{puptime,jdbcType=TIMESTAMP})
+    </insert>
+    <insert id="insertSelective" parameterType="vip.epss.domain.Project">
+        insert into project
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="pid != null">
+                pid,
+            </if>
+            <if test="pname != null">
+                pname,
+            </if>
+            <if test="puptime != null">
+                puptime,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="pid != null">
+                #{pid,jdbcType=INTEGER},
+            </if>
+            <if test="pname != null">
+                #{pname,jdbcType=VARCHAR},
+            </if>
+            <if test="puptime != null">
+                #{puptime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <select id="countByExample" parameterType="vip.epss.domain.ProjectExample" resultType="java.lang.Long">
+        select count(*) from project
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </select>
+    <update id="updateByExampleSelective" parameterType="map">
+        update project
+        <set>
+            <if test="record.pid != null">
+                pid = #{record.pid,jdbcType=INTEGER},
+            </if>
+            <if test="record.pname != null">
+                pname = #{record.pname,jdbcType=VARCHAR},
+            </if>
+            <if test="record.puptime != null">
+                puptime = #{record.puptime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByExample" parameterType="map">
+        update project
+        set pid = #{record.pid,jdbcType=INTEGER},
         pname = #{record.pname,jdbcType=VARCHAR},
-      </if>
-      <if test="record.puptime != null">
-        puptime = #{record.puptime,jdbcType=TIMESTAMP},
-      </if>
-    </set>
-    <if test="_parameter != null">
-      <include refid="Update_By_Example_Where_Clause" />
-    </if>
-  </update>
-  <update id="updateByExample" parameterType="map">
-    update project
-    set pid = #{record.pid,jdbcType=INTEGER},
-      pname = #{record.pname,jdbcType=VARCHAR},
-      puptime = #{record.puptime,jdbcType=TIMESTAMP}
-    <if test="_parameter != null">
-      <include refid="Update_By_Example_Where_Clause" />
-    </if>
-  </update>
-  <update id="updateByPrimaryKeySelective" parameterType="vip.epss.domain.Project">
-    update project
-    <set>
-      <if test="pname != null">
-        pname = #{pname,jdbcType=VARCHAR},
-      </if>
-      <if test="puptime != null">
-        puptime = #{puptime,jdbcType=TIMESTAMP},
-      </if>
-    </set>
-    where pid = #{pid,jdbcType=INTEGER}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="vip.epss.domain.Project">
-    update project
-    set pname = #{pname,jdbcType=VARCHAR},
-      puptime = #{puptime,jdbcType=TIMESTAMP}
-    where pid = #{pid,jdbcType=INTEGER}
-  </update>
+        puptime = #{record.puptime,jdbcType=TIMESTAMP}
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByPrimaryKeySelective" parameterType="vip.epss.domain.Project">
+        update project
+        <set>
+            <if test="pname != null">
+                pname = #{pname,jdbcType=VARCHAR},
+            </if>
+            <if test="puptime != null">
+                puptime = #{puptime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where pid = #{pid,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="vip.epss.domain.Project">
+        update project
+        set pname   = #{pname,jdbcType=VARCHAR},
+            puptime = #{puptime,jdbcType=TIMESTAMP}
+        where pid = #{pid,jdbcType=INTEGER}
+    </update>
+
+    <!--为了避免1对多的子查询出现理解偏差， 子查询的方式在Project实体类中展示-->
+    <resultMap id="BaseResultMapWithObject" type="vip.epss.domain.Project">
+        <id column="pid" jdbcType="INTEGER" property="pid"/>
+        <result column="pname" jdbcType="VARCHAR" property="pname"/>
+        <result column="puptime" jdbcType="TIMESTAMP" property="puptime"/>
+        <!--    select指子查询,column就是子查询的传入参数，-->
+        <collection property="employees" ofType="vip.epss.domain.Employee"
+                    select="vip.epss.dao.EmployeeMapper.selectByPid" column="pid"></collection>
+    </resultMap>
+    <select id="selectByPrimaryKeyWithObject" parameterType="java.lang.Integer" resultMap="BaseResultMapWithObject">
+        select p.pid     as pid,
+               p.pname   as pname,
+               p.puptime as puptime
+        from project as p
+        where pid = #{pid,jdbcType=INTEGER}
+    </select>
 </mapper>

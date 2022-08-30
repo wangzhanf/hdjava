@@ -44,14 +44,7 @@
     </nav>
     <!--    页面标题-->
     <h3>Employee</h3>
-    <!--    添加表单-->
-    <form class="form-inline" action="employee/login">
-        <label for="ename" class="mb-2 mr-sm-2">Ename:</label>
-        <input type="text" class="form-control mb-2 mr-sm-2" id="ename" placeholder="Enter ename" name="ename">
-        <label for="epass" class="mb-2 mr-sm-2">Epass:</label>
-        <input type="text" class="form-control mb-2 mr-sm-2" id="epass" placeholder="Enter epass" name="epass">
-        <button type="submit" class="btn btn-primary mb-2">添加新用户</button>
-    </form>
+
 
     <!--    展示数据-->
     <table id="dataDisplayZone" class="table table-hover table-striped table-bordered">
@@ -67,39 +60,37 @@
     </div>
 
 
-    <!-- 模态框 -->
+    <!-- 添加 模态框 -->
     <div class="modal fade" id="addModal">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">添加新员工</h4>
+                    <h4 class="modal-title">添加新数据</h4>
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
 
                 <!-- 模态框主体 -->
                 <div class="modal-body">
-                    <form method="post" action="${appContext}/employREST/opt" class="form-horizontal" role="form">
-                        <%--input type="hidden" name="_method" value="POST" /--%>
+                    <form method="post" class="form-horizontal" role="form">
+                        <input type="hidden" name="_method" value="POST" />
                         <div class="form-group">
-                            <label for="enameAddInput">姓名ename:</label>
-                            <input type="text" class="form-control" id="enameAddInput" name="ename"
-                                   placeholder="请输入员工姓名"/>
+                            <label for="ename">ename:</label>
+                            <input type="text" class="form-control" id="ename" name="ename" placeholder="请输入"/>
                         </div>
-                        <div id="usernameTips"></div>
+                        <div class="enameTips"></div>
                         <div class="form-group">
-                            <label for="indateAddInput">入职时间:</label>
-                            <input type="date" class="form-control" id="indateAddInput" name="indate"
-                                   placeholder="请输入入职时间">
+                            <label for="epass">epass:</label>
+                            <input type="password" class="form-control" id="epass" name="epass" placeholder="请输入">
                         </div>
                         <div></div>
                         <div class="form-group">
-                            <label for="departList1">所在部门:</label>
-                            <select id="departList1" data-list="departList" name="fdid">
+                            <label for="departmentList">所在部门:</label>
+                            <select id="departmentList" data-list="departmentList" name="edid">
                             </select>
                         </div>
                         <div></div>
                         <div class="form-group">
-                            <button id="addEmployBtn" type="button" class="btn btn-block btn-primary">添加</button>
+                            <button id="addBtn" type="button" class="btn btn-block btn-primary">添加</button>
                         </div>
                     </form>
                 </div>
@@ -121,14 +112,14 @@
 
                 <!-- 模态框主体 -->
                 <div class="modal-body">
-                    <form method="post" action="${appContext}/employREST/opt" class="form-horizontal" role="form">
+                    <form method="post" class="form-horizontal" role="form">
                         <input type="hidden" name="_method" value="PUT"/>
                         <div class="form-group">
                             <label for="eidUpdateInput">IDeid:</label>
                             <input type="text" readonly="readonly" class="form-control" id="eidUpdateInput" name="eid"
                                    placeholder="eid"/>
                         </div>
-                        <div id="usernameTips"></div>
+                        <div class="usernameTips"></div>
                         <div class="form-group">
                             <label for="enameUpdateInput">姓名ename:</label>
                             <input type="text" class="form-control" id="enameUpdateInput" name="ename"
@@ -167,6 +158,34 @@
     <script>
 
         var baseUrl = 'http://localhost:8888/hdjava_war/employee/';
+
+        //填充查询条件和部门列表的列表值
+        function fillSelectList() {
+            //页面加载时获取查询条件中所有的部门列表并填充到下拉列表中
+            $.post(
+                'http://localhost:8888/hdjava_war/department/list',
+                function (departs) {
+
+
+                    //处理返回的数据
+                    for (var i = 0; i < departs.length; i++) {
+                        if (departs[i].did == "${employCondition.fdid}")
+                            $("[data-list=departList]").append("<option selected='selected' value='" + departs[i].did + "'>" + departs[i].dname + "</option>");
+                        else
+                            $("[data-list=departList]").append("<option  value='" + departs[i].did + "'>" + departs[i].dname + "</option>");
+                    }
+                }
+            );
+
+            //页面加载时获取查询条件中的eid前缀表达式填充到下拉列表中
+            var eidCd = ["大于", "等于", "小于"];
+            for (var i = 0; i < 3; i++) {
+                if (i == Number.parseInt("${employCondition.eidCondition}"))
+                    $("#ediCList").append("<option selected='selected' value='" + i + "'>" + eidCd[i] + "</option>");
+                else
+                    $("#ediCList").append("<option  value='" + i + "'>" + eidCd[i] + "</option>");
+            }
+        }
 
         //修改信息时从远端获取数据并填入表单
         function updateForm(ele) {
@@ -231,10 +250,10 @@
             //打开模态框
             $("#addModal").modal({backdrop: "static"});
             //将表单中原有数据清空
-            $("#addModal form").get(0).reset();
+            $("#addModal form").get(0).empty();
         }
 
-        function addEmploy() {
+        function addAction() {
             //添加数据之前先进行数据校验
             //校验通过向服务器发送请求
             $.ajax({
@@ -540,6 +559,8 @@
         $(document).ready(function () {
             //页面加载时向远端获取所有数据,页面定位在第1页
             gotoPage(1,3);// gotoPage(1,3);//默认不带参数则将页面指向第1页，每页3条记录
+            //填充下拉列表
+            fillSelectList();
             //页面加载时给全选和反选按钮绑定事件
             mulCheck();
             //给查询按钮绑定事件
@@ -549,7 +570,7 @@
             //给添加按钮绑定事件,用于打开添加表单模态框
             $("#openAddModalBtn").click(addForm);
             //点击添加按钮将新增数据存放到数据库
-            $("#addEmployBtn").click(addEmploy);
+            $("#addBtn").click(addAction);
             //给每条记录的修改按钮添加事件，用于打开修改表单模态框
             $(document).on("click", ".upBtn", updateForm);
             //给修改员工信息的按钮添加事件
