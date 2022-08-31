@@ -14,7 +14,7 @@
         <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Repository"/>
     </context:component-scan>
 
-    <!--    2 配置视图解析器-->
+    <!--    2 配置视图解析器， 当controller转发返回视图名称， 自动拼接 前缀+视图名+后缀  -->
     <bean id="internalResourceViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="prefix" value="/WEB-INF/pages/"></property>
         <property name="suffix" value=".jsp"></property>
@@ -23,7 +23,7 @@
     <!--    3 开启springMVC的注解驱动-->
     <mvc:annotation-driven/>
 
-    <!--    4 配置静态资源过滤-->
+    <!--    4 配置静态资源过滤,访问静态资源不需要DispatchServlet做复杂处理，  直接放行-->
     <!--    <mvc:default-servlet-handler />-->
 
     <mvc:resources mapping="/css/**" location="/css/"/>
@@ -31,7 +31,6 @@
     <mvc:resources mapping="/images/**" location="/images/"/>
 <!--    确保静态页面不要被springmvc接管，-->
     <mvc:resources mapping="/**/*.html" location="/"/>
-<!--    <mvc:resources mapping="/employee.html" location="/"/>-->
 
     <!--    5 配置拦截器-->
     <!--    <mvc:interceptors>-->

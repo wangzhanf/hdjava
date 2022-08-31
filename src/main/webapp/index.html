@@ -6,11 +6,51 @@
     <link href="css/bootstrap.css" rel="stylesheet"/>
 </head>
 <body>
+<div>
+    <a href="./css/bootstrap.css">用于测试直接访问静态资源</a>
+</div>
+<div>
+    <a href="./test/reOut">用于测试外部重定向</a>
+</div>
+<div>
+    <a href="./test/reIn">用于测试内部重定向</a>
+</div>
+<div>
+    <a href="./test/reErr">用于测试重定向到安全目录【不能的】</a>
+</div>
+<div>
+    <a href="./test/fwView">用于测试转发到安全目录</a>
+</div>
+<div>
+    <a href="./test/fwMV">用于测试转发到安全目录并携带数据</a>
+</div>
+<!--
+    当发送异步请求的时候注意：  部分HTML标记存在默认行为，例如  a超链接   默认跳转页面  ，   form标签的  submit按钮会跳转页面
+    如果要取消默认行为，需要在前端代码中     阻止默认行为发生
+-->
+<div>
+    <a href="./test/onlyData">用于测试请求返回数据</a>
+</div>
+
+<div>
+    <a href="./test/onlyData" id="myBtn1">用于测试异步请求返回数据</a>
+</div>
+
+<form action="./test/updateEmp" method="post">
+    <input type="text" name="ename" />
+    <input type="text" name="epass" />
+    <input type="submit" value="修改" />
+<!--    表单的submit按钮的默认行为是向action指定的地址发送同步请求  ，  跳转页面-->
+</form>
+
+<div id="display"></div>
 
 
 <header class="container-fluid bg-primary text-white">
     <h2 class="offset-4 mt-3 mb-3 p-2">后台管理系统</h2>
 </header>
+
+
 
 <div class="container">
     <h3>登录界面</h3>
@@ -36,6 +76,54 @@
 <script src="js/jquery-3.3.1.js"></script>
 <script src="js/bootstrap.js"></script>
 
+<script>
+    //
+    $(document).ready(function(){
+        $("#myBtn1").click(function(eve){
+            //请求数据
+            $.ajax({
+                url:"http://localhost:8888/hdjava_war/test/onlyData",
+                type:"get",
+                dataType:"json",
+                success:function(ret){
+                    console.log(ret);
+                    for(let i=0;i<ret.dataZone.empList.length;i++){
+                        let eForm = $(`<form action="http://localhost:8888/hdjava_war/test/updateEmp" method="post">`);
+
+                        eForm.append($(`<input type="text" name="ename" value="${ret.dataZone.empList[i].ename}" />`));
+                        eForm.append($(`<input type="text" name="epass" value="${ret.dataZone.empList[i].epass}" />`));
+                        eForm.append($(`<input type="submit" class="updateBtn" value="修改" />`));
+                        $('#display').append(eForm);
+                    }
+                }
+            });
+            //阻止默认行为， 让超链接的默认跳转失效
+            console.log(eve);
+            eve.preventDefault();
+        });
+
+        //当dom初步渲染到页面上时存在的元素可以直接绑定事件，   通过JavaScript动态生成的内容不能通过如下方法绑定事件， 可以利用事件冒泡特性用父节点监听子节点的事件【事件委托】
+        // $('.updateBtn').click(function(eve){
+        //     console.log("修改按钮被点击了");
+        //     eve.preventDefault();
+        // });
+
+        $(document).on('click','.updateBtn',function(eve){
+            $.ajax({
+                url:"http://localhost:8888/hdjava_war/test/updateData",
+                type:"post",
+                dataType:"json",
+                success:function(ret){
+                    console.log(ret);
+
+                }
+            });
+            console.log("修改按钮被点击了");
+            eve.preventDefault();
+        });
+
+    });
+</script>
 
 </body>
 </html>
