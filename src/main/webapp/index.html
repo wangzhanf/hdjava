@@ -36,10 +36,10 @@
     <a href="./test/onlyData" id="myBtn1">用于测试异步请求返回数据</a>
 </div>
 
-<form action="./test/updateEmp" method="post">
+<form class="m-2 p-2">
     <input type="text" name="ename" />
     <input type="text" name="epass" />
-    <input type="submit" value="修改" />
+    <input type="button" class="addBtn" value="添加" />
 <!--    表单的submit按钮的默认行为是向action指定的地址发送同步请求  ，  跳转页面-->
 </form>
 
@@ -79,8 +79,8 @@
 <script>
     //
     $(document).ready(function(){
-        $("#myBtn1").click(function(eve){
-            //请求数据
+
+            //页面加载时请求数据
             $.ajax({
                 url:"http://localhost:8888/hdjava_war/test/onlyData",
                 type:"get",
@@ -88,29 +88,71 @@
                 success:function(ret){
                     console.log(ret);
                     for(let i=0;i<ret.dataZone.empList.length;i++){
-                        let eForm = $(`<form action="http://localhost:8888/hdjava_war/test/updateEmp" method="post">`);
-
-                        eForm.append($(`<input type="text" name="ename" value="${ret.dataZone.empList[i].ename}" />`));
-                        eForm.append($(`<input type="text" name="epass" value="${ret.dataZone.empList[i].epass}" />`));
-                        eForm.append($(`<input type="submit" class="updateBtn" value="修改" />`));
-                        $('#display').append(eForm);
+                        let eDiv = $(`<div class="m-2 p-2">`);
+                        eDiv.append($(`<input type="text" readonly="readonly" name="eid" value="${ret.dataZone.empList[i].eid}" />`));
+                        eDiv.append($(`<input type="text" name="ename" value="${ret.dataZone.empList[i].ename}" />`));
+                        eDiv.append($(`<input type="text" name="epass" value="${ret.dataZone.empList[i].epass}" />`));
+                        eDiv.append($(`<input type="button" class="updateBtn btn btn-info" value="修改" />`));
+                        eDiv.append($(`<input type="button" class="deleteBtn btn btn-danger" value="删除" />`));
+                        $('#display').append(eDiv);
                     }
                 }
             });
-            //阻止默认行为， 让超链接的默认跳转失效
-            console.log(eve);
+
+        $(document).on('click','.addBtn',function(eve){
+            console.log($(eve.target).prev().val());
+            console.log(eve.target.previousElementSibling.value);
+            $.ajax({
+                // url:"http://localhost:8888/hdjava_war/test/addData?epass="+$(eve.target).prev().val(),
+                url:"http://localhost:8888/hdjava_war/test/addData",
+                data: {
+                    ename: $(eve.target).prev().prev().val(),
+                    epass: $(eve.target).prev().val()
+                },
+                type:"post",
+                dataType:"json",
+                success:function(ret){
+                    console.log(ret);
+
+                }
+            });
+            console.log("修改按钮被点击了");
             eve.preventDefault();
         });
 
-        //当dom初步渲染到页面上时存在的元素可以直接绑定事件，   通过JavaScript动态生成的内容不能通过如下方法绑定事件， 可以利用事件冒泡特性用父节点监听子节点的事件【事件委托】
-        // $('.updateBtn').click(function(eve){
-        //     console.log("修改按钮被点击了");
-        //     eve.preventDefault();
-        // });
 
         $(document).on('click','.updateBtn',function(eve){
+            console.log($(eve.target).prev().val());
+            console.log(eve.target.previousElementSibling.value);
             $.ajax({
+                // url:"http://localhost:8888/hdjava_war/test/updateData?epass="+$(eve.target).prev().val(),
                 url:"http://localhost:8888/hdjava_war/test/updateData",
+                data: {
+                    ename: $(eve.target).prev().prev().val(),
+                    epass: $(eve.target).prev().val()
+                },
+                type:"post",
+                dataType:"json",
+                success:function(ret){
+                    console.log(ret);
+
+                }
+            });
+            console.log("修改按钮被点击了");
+            eve.preventDefault();
+        });
+
+        $(document).on('click','.deleteBtn',function(eve){
+            console.log($(eve.target).prev().val());
+            console.log(eve.target.previousElementSibling.value);
+            $.ajax({
+                // url:"http://localhost:8888/hdjava_war/test/updateData?epass="+$(eve.target).prev().val(),
+                url:"http://localhost:8888/hdjava_war/test/deleteData",
+                data: {
+                    eid:$(eve.target).prev().prev().prev().prev().val()
+                    // ename: $(eve.target).prev().prev().val(),
+                    // epass: $(eve.target).prev().val()
+                },
                 type:"post",
                 dataType:"json",
                 success:function(ret){
